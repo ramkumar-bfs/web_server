@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=75.3.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+dependencies = [
+    # Add your main dependencies here, e.g.:
+    "requests",
+    "fastapi",
+    "uvicorn[standard]",
+    "pydantic",
+]
+name = "web_server"
+version = "0.1.0"
+description = "A Python project  for hosting webserver"
+requires-python = ">=3.7"
+
+[project.optional-dependencies]
+dev = ["ruff>=0.4.8"]
+
+[tool.ruff]
+line-length = 88
+indent-width = 4
+target-version = "py37"
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "F",
+    "I",
+    "ANN",
+    "RUF",
+] # pycodestyle (E), pyflakes (F), isort (I), flake8-annotations (ANN), Ruff rules (RUF)
+ignore = []
+fixable = ["ALL"]
+unfixable = []
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
