@@ -1,10 +1,10 @@
 # Default Imports
 import json
-from datetime import datetime
+
 
 # Local Imports
-from .constants import API_FUNCTION_MAPPER
-from .exceptions import WebServerException, APIException
+from ..constants import API_FUNCTION_MAPPER
+from ..exceptions import WebServerException, APIException
 
 
 # TODO: Need to implement server logging and monitoring
@@ -55,25 +55,4 @@ def execute_api_handler(method, path):
     return 200, "application/json", json.dumps(response).encode()
 
 
-# Define GET endpoints
-def hello_handler():
-    """"""
-    return {"message": "Hello from the API!"}
 
-
-def time_handler():
-    """"""
-    return {"time": datetime.now().isoformat()}
-
-
-# Define POST endpoints
-def echo_handler(payload):
-    """"""
-    return {"received": payload}
-
-
-def sum_handler(payload):
-    """"""
-    numbers = payload.get("numbers", [])
-    total = sum(numbers) if isinstance(numbers, list) else 0
-    return {"sum": total}
