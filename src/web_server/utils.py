@@ -1,9 +1,12 @@
+# TODO: MOVE THIS TO A BETTER LOCATION MAYBE I THINK IT WILL BE GOOD TO SEPARATE MODULES FOR WEB_SERVER AND API_APPLICATION.
+
 # Default Imports
 import subprocess
 import sys
 
 # Local Imports
 from . import constants as CONSTANTS
+
 
 def run_echo_new_window(message: str):
     if sys.platform == "win32":
@@ -25,5 +28,3 @@ def run_echo_new_window(message: str):
             )
         except FileNotFoundError:
             subprocess.Popen(["x-terminal-emulator", "-e", f"echo {message}; bash"])
-
-

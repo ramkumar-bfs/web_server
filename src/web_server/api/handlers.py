@@ -1,7 +1,15 @@
 # Local Imports
 from datetime import datetime
 
+
 # Define GET endpoints
+def favicon_handler():
+    """"""
+    # TODO: Serve actual favicon file
+    return {"message": "PIPELINE FAVICON"}
+
+
+# TODO: Seprate appilcation apis into different modules like appilcation, user, auth etc
 def hello_handler():
     """"""
     return {"message": "Hello from the API!"}

@@ -36,15 +36,18 @@ def _get_api_handler(method, path):
     return api_handler
 
 
-def execute_api_handler(method, path):
+def execute_api_handler(method, path, data=None):
     """"""
     try:
         handler = _get_api_handler(method, path)
     except WebServerException as exc:
         # TODO: Add logging and Exception response to client
-        pass
+        raise WebServerException("Failed to get API handler.") from exc
     # Execute handler and get response
-    response = handler()
+    if data:
+        response = handler(payload=data)
+    else:
+        response = handler()
     if not isinstance(response, dict):
         # TODO: Define proper exception for API response errors
         # TODO: Add logging for invalid response types
@@ -53,6 +56,3 @@ def execute_api_handler(method, path):
 
     # TODO: Define proper response structure
     return 200, "application/json", json.dumps(response).encode()
-
-
-

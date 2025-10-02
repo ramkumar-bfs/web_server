@@ -1,4 +1,5 @@
 """Entry point for the module"""
+
 # Local Imports
 from .server.utils import run_server
 
