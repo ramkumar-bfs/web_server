@@ -5,7 +5,8 @@ from pathlib import Path
 from http.server import HTTPServer
 
 # Local Imports
-from .server import ModuleRequestHandler
+from ..exceptions import ServerValidationException
+from ..server import ModuleRequestHandler
 from .. import constants as CONSTANTS
 
 # Modlue Level Constants
@@ -58,6 +59,34 @@ def get_static_file(filename):
 
     return status, content_type, content
 
+def get_unsupported_application_methods(application_supported_methods):
+    """"""
+    if not isinstance(application_supported_methods, list):
+        raise ServerValidationException(f"Provided Application Methos should a 'List' dataType, But got '{type(application_supported_methods)}'")
+        
+    return [method for method in application_supported_methods if method not in CONSTANTS.SERVER_SUPPORTED_METHODS]
+
+def validate_application_handlers(application_handlers):
+    """
+    """
+    if not isinstance(application_handlers, dict):
+        raise ServerValidationException(f"Application Handlers should a 'dict' of 'endpoints' keys with 'functionObject' values. Not '{type(application_handlers)}' datatype provided.")
+
+    # Validate Methods in application handlers
+    unsupported_methods = get_unsupported_application_methods(application_handlers.keys())
+
+    if unsupported_methods:
+        raise ServerValidationException(f"The following Methods '{" , ".join(unsupported_methods)}'are not supported by WebServer")
+    
+    handlers_validate_mapper ={
+    handler.__name__: callable(handler)
+    for method_handlers in application_handlers.values()
+    for endpoint_handlers in method_handlers.values()
+    for handler in endpoint_handlers
+    }
+    
+    if not all(handlers_validate_mapper.values()):
+        raise ServerValidationException(f"The folowing Handlers are not callable '{" , ".join([handler_name for handler_name, is_callable in handlers_validate_mapper if not is_callable])}', Validate application handlers.")
 
 def run_server():
     # TODO: REPLACE WITH GET_ENV FUNCTION FOR ENVIRONMENT MODULE

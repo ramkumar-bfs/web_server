@@ -1,8 +1,8 @@
 """Entry point for the module"""
 
 # Local Imports
-from .server.utils import run_server
+from .utils import server_utils
 
 
 if __name__ == "__main__":
-    run_server()
+    server_utils.run_server()
