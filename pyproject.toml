@@ -12,12 +12,12 @@ description = "A Python project for hosting webserver using Http.server"
 requires-python = ">=2.7"
 
 [project.optional-dependencies]
-dev = ["ruff>=0.4.8"]
+dev = ["ruff>=0.4.8", "pytest", "pytest-cov", "pre-commit"]
 
 [tool.ruff]
 line-length = 88
 indent-width = 4
-target-version = "py39"
+target-version = "py37"
 
 [tool.ruff.lint]
 select = [

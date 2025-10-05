@@ -43,6 +43,20 @@ def _get_static_content(file_path):
         return f.read()
 
 
+def _get_unsupported_application_methods(application_supported_methods):
+    """"""
+    if not isinstance(application_supported_methods, list):
+        raise ServerValidationException(
+            f"Provided Application Methods should a 'List' dataType, But got '{type(application_supported_methods)}'"
+        )
+
+    return [
+        method
+        for method in application_supported_methods
+        if method not in CONSTANTS.SERVER_SUPPORTED_METHODS
+    ]
+
+
 def get_static_file(filename):
     # TODO: Handle or send Exception response to client
     status = 200
@@ -53,40 +67,52 @@ def get_static_file(filename):
     except FileNotFoundError as exc:
         status = 404
         # TODO: Define proper exception for static file not found in static files
-        # TODO: Remove the handcoded HTML 404 response
+        # TODO: Remove the hardcoded HTML 404 response
         content_type = "text/html"
         content = b"<html><body><h1>404 Not Found</h1></body></html>"
 
     return status, content_type, content
 
-def get_unsupported_application_methods(application_supported_methods):
-    """"""
-    if not isinstance(application_supported_methods, list):
-        raise ServerValidationException(f"Provided Application Methos should a 'List' dataType, But got '{type(application_supported_methods)}'")
-        
-    return [method for method in application_supported_methods if method not in CONSTANTS.SERVER_SUPPORTED_METHODS]
+
+def get_application_endpoints(application_handlers):
+    """ """
+    # Validate application handlers
+    validate_application_handlers(application_handlers)
+    return [
+        endpoint
+        for method_handlers in application_handlers.values()
+        for endpoint in method_handlers.keys()
+    ]
+
 
 def validate_application_handlers(application_handlers):
-    """
-    """
+    """ """
     if not isinstance(application_handlers, dict):
-        raise ServerValidationException(f"Application Handlers should a 'dict' of 'endpoints' keys with 'functionObject' values. Not '{type(application_handlers)}' datatype provided.")
+        raise ServerValidationException(
+            f"Application Handlers should a 'dict' of 'endpoints' keys with 'functionObject' values. Not '{type(application_handlers)}' datatype provided."
+        )
 
     # Validate Methods in application handlers
-    unsupported_methods = get_unsupported_application_methods(application_handlers.keys())
+    unsupported_methods = _get_unsupported_application_methods(
+        list(application_handlers.keys())
+    )
 
     if unsupported_methods:
-        raise ServerValidationException(f"The following Methods '{" , ".join(unsupported_methods)}'are not supported by WebServer")
-    
-    handlers_validate_mapper ={
-    handler.__name__: callable(handler)
-    for method_handlers in application_handlers.values()
-    for endpoint_handlers in method_handlers.values()
-    for handler in endpoint_handlers
+        raise ServerValidationException(
+            f"The following Methods '{' , '.join(unsupported_methods)}'are not supported by WebServer"
+        )
+
+    handlers_validate_mapper = {
+        handler.__name__: handler
+        for endpoint_mapper in application_handlers.values()
+        for handler in endpoint_mapper.values()
     }
-    
+
     if not all(handlers_validate_mapper.values()):
-        raise ServerValidationException(f"The folowing Handlers are not callable '{" , ".join([handler_name for handler_name, is_callable in handlers_validate_mapper if not is_callable])}', Validate application handlers.")
+        raise ServerValidationException(
+            f"The following Handlers are not callable '{' , '.join([handler_name for handler_name, is_callable in handlers_validate_mapper if not is_callable])}', Validate application handlers."
+        )
+
 
 def run_server():
     # TODO: REPLACE WITH GET_ENV FUNCTION FOR ENVIRONMENT MODULE
