@@ -19,7 +19,9 @@
             "request": "launch",
             "program": "${workspaceFolder}/src/web_server/main.py",
             "console": "integratedTerminal",
-            "args": "${command:pickArgs}"
+            "justMyCode": false,
+            "args": "${command:pickArgs}",
+            "envFile": "${workspaceFolder}/.env"
         },
         {
             "name": "Python Debugger: Module",

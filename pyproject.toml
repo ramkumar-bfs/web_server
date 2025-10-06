@@ -5,18 +5,14 @@ build-backend = "setuptools.build_meta"
 [project]
 dependencies = [
     # Add your main dependencies here, e.g.:
-    "requests",
-    "fastapi",
-    "uvicorn[standard]",
-    "pydantic",
 ]
 name = "web_server"
 version = "0.1.0"
-description = "A Python project  for hosting webserver"
-requires-python = ">=3.7"
+description = "A Python project for hosting webserver using Http.server"
+requires-python = ">=2.7"
 
 [project.optional-dependencies]
-dev = ["ruff>=0.4.8"]
+dev = ["ruff>=0.4.8", "pytest", "pytest-cov", "pre-commit"]
 
 [tool.ruff]
 line-length = 88
